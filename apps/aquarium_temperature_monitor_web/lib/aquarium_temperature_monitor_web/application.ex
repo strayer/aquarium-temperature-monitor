@@ -9,7 +9,7 @@ defmodule AquariumTemperatureMonitorWeb.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      AquariumTemperatureMonitorWeb.Endpoint,
+      AquariumTemperatureMonitorWeb.Endpoint
       # Starts a worker by calling: AquariumTemperatureMonitorWeb.Worker.start_link(arg)
       # {AquariumTemperatureMonitorWeb.Worker, arg},
     ]

@@ -15,8 +15,15 @@ config :aquarium_temperature_monitor_web, AquariumTemperatureMonitorWeb.Endpoint
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [node: ["node_modules/webpack/bin/webpack.js", "--mode", "development", "--watch-stdin",
-                                        cd: Path.expand("../assets", __DIR__)]]
+  watchers: [
+    node: [
+      "node_modules/webpack/bin/webpack.js",
+      "--mode",
+      "development",
+      "--watch-stdin",
+      cd: Path.expand("../assets", __DIR__)
+    ]
+  ]
 
 # ## SSL Support
 #
@@ -52,5 +59,3 @@ config :aquarium_temperature_monitor_web, AquariumTemperatureMonitorWeb.Endpoint
       ~r{lib/aquarium_temperature_monitor_web/templates/.*(eex)$}
     ]
   ]
-
-

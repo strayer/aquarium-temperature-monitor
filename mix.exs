@@ -4,7 +4,7 @@ defmodule AquariumTemperatureMonitor.Umbrella.MixProject do
   def project do
     [
       apps_path: "apps",
-      start_permanent: Mix.env == :prod,
+      start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
   end

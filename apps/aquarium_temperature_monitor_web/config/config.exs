@@ -13,9 +13,8 @@ config :aquarium_temperature_monitor_web, AquariumTemperatureMonitorWeb.Endpoint
   url: [host: "localhost"],
   secret_key_base: "lz8+rGyamChW22JMoIAn5jyILgzp4oymSpwjNPAyGln3pOjcvZr5k03gSCTJgKCe",
   render_errors: [view: AquariumTemperatureMonitorWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: AquariumTemperatureMonitorWeb.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: AquariumTemperatureMonitorWeb.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"
