@@ -16,8 +16,8 @@ defmodule AquariumTemperatureMonitor.TemperatureReporter do
   # API
   ###
 
-  def start_link(_) do
-    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
+  def start_link(influxdb_config: influxdb_config) do
+    GenServer.start_link(__MODULE__, [influxdb_config: influxdb_config], name: __MODULE__)
   end
 
   ###
@@ -25,38 +25,52 @@ defmodule AquariumTemperatureMonitor.TemperatureReporter do
   ###
 
   @impl true
-  def init(_) do
+  def init(state) do
     start_timer(0)
-    {:ok, nil}
+    {:ok, state}
   end
 
   @impl true
   def handle_info(:trigger, state) do
-    handle_reading(TemperatureMonitor.get_reading())
+    handle_reading(TemperatureMonitor.get_reading(), state[:influxdb_config])
     {:noreply, state}
+  end
+
+  @impl true
+  def format_status(_reason, [_pdict, state]) do
+    # Remove InfluxDB config from state to avoid logging secrets
+    state =
+      Enum.map(state, fn x ->
+        case x do
+          {:influxdb_config, _} -> {:influxdb_config, "***REDACTED***"}
+          _ -> x
+        end
+      end)
+
+    [data: [{'State', state}]]
   end
 
   defp start_timer(milliseconds) do
     Process.send_after(self(), :trigger, milliseconds)
   end
 
-  defp handle_reading(%TemperatureReading{celsius: nil}) do
+  defp handle_reading(%TemperatureReading{celsius: nil}, _influxdb_config) do
     # Monitor still initalizing or never read a temperature
     Logger.debug("Reporter received nil celsius TemperatureReading, retrying")
 
     start_timer(5_000)
   end
 
-  defp handle_reading(%TemperatureReading{datetime: nil}) do
+  defp handle_reading(%TemperatureReading{datetime: nil}, _influxdb_config) do
     # Monitor still initalizing or never read a temperature
     Logger.debug("Reporter received nil datetime TemperatureReading, retrying")
 
     start_timer(5_000)
   end
 
-  defp handle_reading(%TemperatureReading{} = reading) do
+  defp handle_reading(%TemperatureReading{} = reading, influxdb_config) do
     Logger.info("Reporting new temperature (#{reading.celsius}°C)")
-    InfluxDBHandler.send_temperature(reading)
+    InfluxDBHandler.send_temperature(reading, influxdb_config)
     start_timer(@timer_milliseconds)
   end
 end
