@@ -10,7 +10,11 @@ use Mix.Config
 # child application in their own app, but all other
 # dependencies, regardless if they belong to one or multiple
 # apps, should be configured in the umbrella to avoid confusion.
-import_config "../apps/*/config/config.exs"
+
+# load sub-apps configs explicitly to make sure config overriding in fw works
+import_config "../apps/aquarium_temperature_monitor/config/config.exs"
+import_config "../apps/aquarium_temperature_monitor_web/config/config.exs"
+import_config "../apps/fw/config/config.exs"
 
 # Configures Elixir's Logger
 config :logger, :console,
