@@ -10,6 +10,7 @@ config :aquarium_temperature_monitor,
   monitor_timer_milliseconds: 5 * 1_000,
   reporter_timer_milliseconds: 5 * 60 * 1_000,
   influxdb_url: "http://localhost:8086/",
+  influxdb_credentials: nil,
   influxdb_db: "aquarium",
   influxdb_measurement: "temperature"
 

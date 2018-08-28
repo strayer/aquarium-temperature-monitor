@@ -13,18 +13,37 @@ defmodule AquariumTemperatureMonitor.TemperatureReporter.InfluxDBHandler do
       |> send_data(config)
   end
 
-  defp build_data(reading, config) do
-    "#{config[:measurement]} value=#{Float.to_string(reading.celsius)} #{
-      format_datetime(reading.datetime)
-    }"
+  defp build_data(%{celsius: celsius, datetime: datetime}, %{measurement: measurement}) do
+    "#{measurement} value=#{Float.to_string(celsius)} #{format_datetime(datetime)}"
   end
 
-  defp send_data(data, config) do
-    url = String.trim_trailing(config[:url], "/")
-    HTTPoison.post("#{url}/write?db=#{URI.encode(config[:db])}", data, @headers)
+  defp send_data(data, %{url: url, db: db} = config) do
+    url = String.trim_trailing(url, "/")
+
+    HTTPoison.post(
+      "#{url}/write?db=#{URI.encode(db)}",
+      data,
+      @headers,
+      create_httpoison_options(config)
+    )
   end
 
   defp format_datetime(datetime) do
     DateTime.to_unix(datetime, :nanoseconds)
+  end
+
+  defp create_httpoison_options(%{credentials: credentials}) do
+    if credentials do
+      [
+        hackney: [
+          basic_auth:
+            credentials
+            |> String.split(":")
+            |> List.to_tuple()
+        ]
+      ]
+    else
+      []
+    end
   end
 end

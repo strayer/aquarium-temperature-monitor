@@ -8,11 +8,12 @@ defmodule AquariumTemperatureMonitor.Application do
   def start(_type, _args) do
     sensor_device_id = get_config("SENSOR_DEVICE_ID", :monitor_sensor_device_id)
 
-    influxdb_config = [
+    influxdb_config = %{
       url: get_config("INFLUXDB_URL", :influxdb_url),
+      credentials: get_config("INFLUXDB_CREDENTIALS", :influxdb_credentials),
       db: get_config("INFLUXDB_DB", :influxdb_db),
       measurement: get_config("INFLUXDB_MEASUREMENT", :influxdb_measurement)
-    ]
+    }
 
     children = [
       {AquariumTemperatureMonitor.TemperatureMonitor, sensor_device_id},
