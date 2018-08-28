@@ -6,13 +6,13 @@ defmodule AquariumTemperatureMonitor.Application do
   use Application
 
   def start(_type, _args) do
-    sensor_device_id = get_config("SENSOR_DEVICE_ID", :monitor_sensor_device_id)
+    sensor_device_id = get_config(:monitor_sensor_device_id)
 
     influxdb_config = %{
-      url: get_config("INFLUXDB_URL", :influxdb_url),
-      credentials: get_config("INFLUXDB_CREDENTIALS", :influxdb_credentials),
-      db: get_config("INFLUXDB_DB", :influxdb_db),
-      measurement: get_config("INFLUXDB_MEASUREMENT", :influxdb_measurement)
+      url: get_config(:influxdb_url),
+      credentials: get_config(:influxdb_credentials),
+      db: get_config(:influxdb_db),
+      measurement: get_config(:influxdb_measurement)
     }
 
     children = [
@@ -26,10 +26,9 @@ defmodule AquariumTemperatureMonitor.Application do
   end
 
   defp get_config(env_variable_name, app_env_atom) do
-    System.get_env(env_variable_name) ||
-      Application.fetch_env!(
-        :aquarium_temperature_monitor,
-        app_env_atom
-      )
+    Application.fetch_env!(
+      :aquarium_temperature_monitor,
+      app_env_atom
+    )
   end
 end
