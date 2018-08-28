@@ -4,4 +4,7 @@
 # the umbrella root.
 use Mix.Config
 
+config :aquarium_temperature_monitor,
+  monitor_implementation: AquariumTemperatureMonitor.TemperatureMonitor.HardwareImpl
+
 import_config "prod.secret.exs"
