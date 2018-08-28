@@ -35,7 +35,7 @@ defmodule AquariumTemperatureMonitor.MixProject do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    []
+    [{:httpoison, "~> 1.3"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
