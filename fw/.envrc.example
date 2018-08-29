@@ -1,0 +1,8 @@
+export MIX_TARGET="rpi0"
+export MIX_ENV="prod"
+export PHOENIX_SECRET_KEY_BASE="***CHANGEME***"
+export SENSOR_DEVICE_ID="011831688cff"
+export INFLUXDB_URL="***CHANGEME***"
+export INFLUXDB_CREDENTIALS="***CHANGEME***"
+export INFLUXDB_DB="aquarium"
+export INFLUXDB_MEASUREMENT="temperature"
