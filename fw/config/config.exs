@@ -79,6 +79,9 @@ config :ui, UiWeb.Gettext,
 
 # Application configuration
 
+# Disable tzdata autoupdate, read-only filesystem
+config :tzdata, :autoupdate, :disabled
+
 config :aquarium_temperature_monitor,
   monitor_implementation: AquariumTemperatureMonitor.TemperatureMonitor.HardwareImpl,
   monitor_sensor_device_id: System.get_env("SENSOR_DEVICE_ID"),
