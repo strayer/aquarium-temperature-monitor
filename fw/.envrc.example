@@ -6,3 +6,7 @@ export INFLUXDB_URL="***CHANGEME***"
 export INFLUXDB_CREDENTIALS="***CHANGEME***"
 export INFLUXDB_DB="aquarium"
 export INFLUXDB_MEASUREMENT="temperature"
+
+# WiFi configuration
+export NERVES_NETWORK_SSID="***CHANGEME***"
+export NERVES_NETWORK_PSK="***CHANGEME***"

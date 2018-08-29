@@ -22,17 +22,17 @@ config :nerves_init_gadget,
   mdns_domain: "aquariumpi.local",
   node_name: "aquariumpi"
 
-# config :nerves_network,
-#   regulatory_domain: "DE"
+config :nerves_network,
+  regulatory_domain: "DE"
 
-# key_mgmt = System.get_env("NERVES_NETWORK_KEY_MGMT") || "WPA-PSK"
+key_mgmt = System.get_env("NERVES_NETWORK_KEY_MGMT") || "WPA-PSK"
 
-# config :nerves_network, :default,
-#   wlan0: [
-#     ssid: System.get_env("NERVES_NETWORK_SSID"),
-#     psk: System.get_env("NERVES_NETWORK_PSK"),
-#     key_mgmt: String.to_atom(key_mgmt)
-#   ]
+config :nerves_network, :default,
+  wlan0: [
+    ssid: System.get_env("NERVES_NETWORK_SSID"),
+    psk: System.get_env("NERVES_NETWORK_PSK"),
+    key_mgmt: String.to_atom(key_mgmt)
+  ]
 
 config :nerves_firmware_ssh,
   authorized_keys: [
@@ -48,14 +48,15 @@ config :logger, backends: [RingLogger]
 # Phoenix configuration
 
 config :ui, UiWeb.Endpoint,
-  url: [host: "localhost"],
+  url: [host: "aquariumpi.local"],
   http: [port: 80],
   secret_key_base: System.get_env("PHOENIX_SECRET_KEY_BASE"),
   root: Path.dirname(__DIR__),
   server: true,
   render_errors: [view: UiWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Nerves.PubSub, adapter: Phoenix.PubSub.PG2],
-  code_reloader: false
+  code_reloader: false,
+  cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Configures Elixir's Logger
 config :logger, :console,
