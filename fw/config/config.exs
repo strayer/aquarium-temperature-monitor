@@ -38,7 +38,14 @@ config :nerves_firmware_ssh,
   authorized_keys: [
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCgui4ILeD+1ydZXKVoIJLmDNYSEB0vwFWLhk0IC3zqv6xcoxA7CM5LKGD/RBZGuITv6x+aNoZP5RdZjsD7Y5LPD10h4S+G6UDoNF0cVS45yV5kpepzv6eplaqnsYZcvMUvktimrlx1GKPNWUVcz5FRD9naXe2KWnJ7hKqvPutMrg3adLxPU89WZeVXG+1XP8UxseZBLRpkhC2VI4S4yJPY4a5gVWd2uRjVo11roswZV3EgLPLCE52HUGMRHlC7bv0QynTrWlPi45FrpGBpqfaBQDMQOHd32pBj9gs+KclJ7uO3yG5vEkrhEbm3IA8+nfdL1FnCzR5v5I74fHq5ROxu/59oPnoatHwZHrChOD2BfcD6UydQo/uYWGNXcODM8OAGv9nqxAMJkGI526b9sBwdMpxCeSyX4/dAS6tsvQ9ZgmuPIV8TAtZlfUWmlBaVOTOAnQ/M49b2LRfT7QoXcA8jgJh034ZmoByfF+0j+mEoirWn/JWDNuzcA7FkfjC2La25hhELWGgoUx2IuFKv5/BL5aUVJ2jXWxKrjb6fLhdvKT42WZ4kS/KfZ2rCqQA/RiAfKEk0RnHPU5BQZt+ojvCEDCA6Xiqd7zHiNHELLcbnDIu7+C4RMwsi7NLu8IVNkdzuy3Z1MxjgBqgs0nBWg33ZAVavhGHHbNPt1DOnt+wVKw=="
   ]
-  
+
+config :nerves_time, :servers, [
+  "0.de.pool.ntp.org",
+  "1.de.pool.ntp.org",
+  "2.de.pool.ntp.org",
+  "3.de.pool.ntp.org"
+]
+
 # Use Ringlogger as the logger backend and remove :console.
 # See https://hexdocs.pm/ring_logger/readme.html for more information on
 # configuring ring_logger.
