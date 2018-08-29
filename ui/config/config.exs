@@ -10,8 +10,7 @@ config :ui, UiWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "rNuv6qMGrWBKzbSn7SkwBO8tEWu4Nkp6i/FIMIdTwJ5/bZB1u4R66Fm+WNnBKCFt",
   render_errors: [view: UiWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Ui.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Ui.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -21,6 +20,10 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :ui, UiWeb.Gettext,
+  default_locale: "en",
+  locales: ~w(en de)
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

@@ -73,6 +73,10 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :ui, UiWeb.Gettext,
+  default_locale: "en",
+  locales: ~w(en de)
+
 # Application configuration
 
 config :aquarium_temperature_monitor,

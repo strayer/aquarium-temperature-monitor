@@ -6,9 +6,9 @@ defmodule Ui.MixProject do
       app: :ui,
       version: "0.1.0",
       elixir: "~> 1.7",
-      elixirc_paths: elixirc_paths(Mix.env),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers,
-      start_permanent: Mix.env == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
   end
@@ -25,7 +25,7 @@ defmodule Ui.MixProject do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
   #
@@ -39,7 +39,9 @@ defmodule Ui.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:cowboy, "~> 1.0"},
-      {:aquarium_temperature_monitor, path: "../core"}
+      {:aquarium_temperature_monitor, path: "../core"},
+      {:timex, "~> 3.3"},
+      {:plug_preferred_locales, "~> 0.1.0"}
     ]
   end
 end
