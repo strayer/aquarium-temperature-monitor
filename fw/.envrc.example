@@ -1,3 +1,4 @@
+export DESTINATION="aquariumpi.local"
 export MIX_TARGET="rpi0"
 export MIX_ENV="prod"
 export PHOENIX_SECRET_KEY_BASE="***CHANGEME***"
