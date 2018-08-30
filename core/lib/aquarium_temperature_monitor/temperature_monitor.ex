@@ -64,16 +64,27 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
 
   @impl true
   def handle_info(:trigger_timer, state) do
-    # Restart the timer
-    Process.send_after(self(), :trigger_timer, @timer_milliseconds)
+    pid = self()
 
+    spawn(fn ->
+      new_reading =
+        state.device_id
+        |> @implementation.read_temperature()
+        |> parse_raw_reading()
+
+      GenServer.cast(pid, {:update_reading, new_reading})
+
+      # Restart the timer
+      Process.send_after(pid, :trigger_timer, @timer_milliseconds)
+    end)
+
+    {:noreply, state}
+  end
+
+  @impl true
+  def handle_cast({:update_reading, new_reading}, state) do
     old_reading = state.current_reading
-
-    new_state =
-      state.device_id
-      |> @implementation.read_temperature()
-      |> parse_raw_reading()
-      |> update_state_with_reading(state)
+    new_state = update_state_with_reading(new_reading, state)
 
     # TODO send temperature to LCDDriver
 
@@ -82,7 +93,7 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
     {:noreply, new_state}
   end
 
-  defp parse_raw_reading({:ok, {line1, line2} = data}) do
+  defp parse_raw_reading({:ok, {line1, line2}}) do
     if String.ends_with?(line1, "YES") do
       {:ok, parse_temp_line(line2)}
     else

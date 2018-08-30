@@ -1,8 +1,6 @@
 defmodule AquariumTemperatureMonitor.TemperatureMonitor.HardwareImpl do
   @behaviour AquariumTemperatureMonitor.TemperatureMonitor.Behaviour
 
-  alias AquariumTemperatureMonitor.TemperatureMonitor.TemperatureReading
-
   @sys_dir "/sys/bus/w1/devices/"
 
   @impl true
