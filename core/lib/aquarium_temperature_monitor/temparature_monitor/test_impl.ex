@@ -4,7 +4,7 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor.TestImpl do
   @impl true
   def read_temperature(_device_id) do
     # Simulate the time it takes to read the sensor
-    Process.sleep(Enum.random(0..999) + 1_000)
+    unless Mix.env() == :test, do: Process.sleep(Enum.random(0..999) + 1_000)
 
     {:ok,
      {"33 00 4b 46 ff ff 02 10 f4 : crc=f4 YES",

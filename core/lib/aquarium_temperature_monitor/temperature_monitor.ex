@@ -30,10 +30,20 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
   end
 
   @implementation Application.fetch_env!(:aquarium_temperature_monitor, :monitor_implementation)
-  @timer_milliseconds Application.fetch_env!(
+
+  @default_timer_milliseconds 5 * 1_000
+
+  @timer_milliseconds Application.get_env(
                         :aquarium_temperature_monitor,
-                        :monitor_timer_milliseconds
+                        :monitor_timer_milliseconds,
+                        @default_timer_milliseconds
                       )
+
+  @timer_enabled Application.get_env(
+                   :aquarium_temperature_monitor,
+                   :monitor_timer_enabled,
+                   true
+                 )
 
   ###
   # API
@@ -53,7 +63,7 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
 
   @impl true
   def init(%State{} = initial_state) do
-    Process.send_after(self(), :trigger_timer, 0)
+    start_timer(0)
     {:ok, initial_state}
   end
 
@@ -67,24 +77,25 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
     pid = self()
 
     spawn(fn ->
-      new_reading =
-        state.device_id
-        |> @implementation.read_temperature()
-        |> parse_raw_reading()
+      new_reading = @implementation.read_temperature(state.device_id)
 
-      GenServer.cast(pid, {:update_reading, new_reading})
+      GenServer.cast(pid, {:parse_reading, new_reading})
 
       # Restart the timer
-      Process.send_after(pid, :trigger_timer, @timer_milliseconds)
+      start_timer()
     end)
 
     {:noreply, state}
   end
 
   @impl true
-  def handle_cast({:update_reading, new_reading}, state) do
+  def handle_cast({:parse_reading, raw_reading}, state) do
     old_reading = state.current_reading
-    new_state = update_state_with_reading(new_reading, state)
+
+    new_state =
+      raw_reading
+      |> parse_raw_reading()
+      |> update_state_with_reading(state)
 
     # TODO send temperature to LCDDriver
 
@@ -92,6 +103,8 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
 
     {:noreply, new_state}
   end
+
+  defp parse_raw_reading({:ok, {line1}}), do: parse_raw_reading({:ok, {line1, ""}})
 
   defp parse_raw_reading({:ok, {line1, line2}}) do
     if String.ends_with?(line1, "YES") do
@@ -139,5 +152,9 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
   end
 
   defp log_temperature_change(_, _) do
+  end
+
+  defp start_timer(milliseconds \\ @timer_milliseconds) do
+    if @timer_enabled, do: Process.send_after(self(), :trigger_timer, milliseconds)
   end
 end

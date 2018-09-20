@@ -7,10 +7,19 @@ defmodule AquariumTemperatureMonitor.TemperatureReporter do
   alias AquariumTemperatureMonitor.TemperatureMonitor.TemperatureReading
   alias AquariumTemperatureMonitor.TemperatureReporter.InfluxDBHandler
 
-  @timer_milliseconds Application.fetch_env!(
+  @default_timer_milliseconds 5 * 60 * 1_000
+
+  @timer_milliseconds Application.get_env(
                         :aquarium_temperature_monitor,
-                        :reporter_timer_milliseconds
+                        :reporter_timer_milliseconds,
+                        @default_timer_milliseconds
                       )
+
+  @timer_enabled Application.get_env(
+                   :aquarium_temperature_monitor,
+                   :reporter_timer_enabled,
+                   true
+                 )
 
   ###
   # API
@@ -32,7 +41,13 @@ defmodule AquariumTemperatureMonitor.TemperatureReporter do
 
   @impl true
   def handle_info(:trigger, state) do
-    handle_reading(TemperatureMonitor.get_reading(), state[:influxdb_config])
+    GenServer.cast(self(), {:handle_reading, TemperatureMonitor.get_reading()})
+    {:noreply, state}
+  end
+
+  @impl true
+  def handle_cast({:handle_reading, new_reading}, state) do
+    handle_reading(new_reading, state[:influxdb_config])
     {:noreply, state}
   end
 
@@ -50,8 +65,8 @@ defmodule AquariumTemperatureMonitor.TemperatureReporter do
     [data: [{'State', state}]]
   end
 
-  defp start_timer(milliseconds) do
-    Process.send_after(self(), :trigger, milliseconds)
+  defp start_timer(milliseconds \\ @timer_milliseconds) do
+    if @timer_enabled, do: Process.send_after(self(), :trigger, milliseconds)
   end
 
   defp handle_reading(%TemperatureReading{celsius: nil}, _influxdb_config) do
@@ -71,6 +86,6 @@ defmodule AquariumTemperatureMonitor.TemperatureReporter do
   defp handle_reading(%TemperatureReading{} = reading, influxdb_config) do
     Logger.info("Reporting new temperature (#{reading.celsius}°C)")
     InfluxDBHandler.send_temperature(reading, influxdb_config)
-    start_timer(@timer_milliseconds)
+    start_timer()
   end
 end
