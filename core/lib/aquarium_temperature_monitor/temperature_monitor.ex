@@ -76,6 +76,7 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
   def handle_info(:trigger_timer, state) do
     pid = self()
 
+    # Read temperature asynchronously to avoid blocking
     spawn(fn ->
       new_reading = @implementation.read_temperature(state.device_id)
 
