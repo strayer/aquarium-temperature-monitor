@@ -63,7 +63,7 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
 
   @impl true
   def init(%State{} = initial_state) do
-    start_timer(0)
+    start_timer(self(), 0)
     {:ok, initial_state}
   end
 
@@ -82,7 +82,7 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
       GenServer.cast(pid, {:parse_reading, new_reading})
 
       # Restart the timer
-      start_timer()
+      start_timer(pid)
     end)
 
     {:noreply, state}
@@ -154,7 +154,7 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
   defp log_temperature_change(_, _) do
   end
 
-  defp start_timer(milliseconds \\ @timer_milliseconds) do
-    if @timer_enabled, do: Process.send_after(self(), :trigger_timer, milliseconds)
+  defp start_timer(pid, time \\ @timer_milliseconds) do
+    if @timer_enabled, do: Process.send_after(pid, :trigger_timer, time)
   end
 end
