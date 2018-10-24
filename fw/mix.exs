@@ -39,7 +39,7 @@ defmodule Fw.MixProject do
     [
       {:nerves, "~> 1.3", runtime: false},
       {:shoehorn, "~> 0.4"},
-      {:ring_logger, "~> 0.4"},
+      {:ring_logger, "~> 0.6"},
       {:ui, path: "../ui"}
     ] ++ deps(@target)
   end
@@ -49,8 +49,8 @@ defmodule Fw.MixProject do
 
   defp deps(target) do
     [
-      {:nerves_runtime, "~> 0.6"},
-      {:nerves_init_gadget, github: "nerves-project/nerves_init_gadget"},
+      {:nerves_runtime, "~> 0.8"},
+      {:nerves_init_gadget, "~> 0.5.2"},
       {:nerves_time, "~> 0.2"}
     ] ++ system(target)
   end
