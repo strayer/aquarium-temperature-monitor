@@ -34,10 +34,11 @@ defmodule AquariumTemperatureMonitor.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:httpoison, "~> 1.3"},
-      {:bypass, "~> 0.8", only: :test},
+      {:httpoison, "~> 1.4"},
+      {:bypass, github: "oo6/bypass", ref: "50af8d7", only: :test},
+      {:plug_cowboy, "~> 2.0", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
-      {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 0.10.2", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0.0-rc.3", only: [:dev], runtime: false},
       {:ex_lcd, "~> 0.4.0"},
       {:timex, "~> 3.3"}
