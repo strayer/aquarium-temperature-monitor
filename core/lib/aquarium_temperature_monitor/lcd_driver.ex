@@ -5,34 +5,6 @@ defmodule AquariumTemperatureMonitor.LCDDriver do
 
   alias AquariumTemperatureMonitor.TemperatureMonitor.TemperatureReading
 
-  defmodule StubImpl do
-    def degree_symbol, do: '°'
-
-    def start_link() do
-    end
-
-    def render_first_line(charlist) do
-      Logger.debug(fn -> "LCD would render '#{charlist}' as first line" end)
-    end
-  end
-
-  defmodule HardwareImpl do
-    def degree_symbol, do: [223]
-
-    def start_link() do
-      ExLCD.start_link(
-        {ExLCD.HD44780, Application.fetch_env!(:aquarium_temperature_monitor, :lcd)}
-      )
-
-      ExLCD.enable(:display)
-    end
-
-    def render_first_line(charlist) do
-      ExLCD.home()
-      ExLCD.write(charlist)
-    end
-  end
-
   @implementation Application.fetch_env!(:aquarium_temperature_monitor, :lcd_implementation)
 
   ###
