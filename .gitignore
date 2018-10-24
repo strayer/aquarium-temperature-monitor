@@ -1,0 +1,3 @@
+.elixir_ls
+.dir-locals.el
+*.code-workspace
