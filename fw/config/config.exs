@@ -55,8 +55,13 @@ config :logger, backends: [RingLogger]
 # Phoenix configuration
 
 config :ui, UiWeb.Endpoint,
-  url: [host: "aquariumpi.local"],
+  url: [
+    host: System.get_env("PHOENIX_URL_HOST"),
+    scheme: System.get_env("PHOENIX_URL_SCHEME"),
+    port: System.get_env("PHOENIX_URL_PORT")
+  ],
   http: [port: 80],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
   secret_key_base: System.get_env("PHOENIX_SECRET_KEY_BASE"),
   root: Path.dirname(__DIR__),
   server: true,
