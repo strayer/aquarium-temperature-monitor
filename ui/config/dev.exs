@@ -9,7 +9,8 @@ config :aquarium_temperature_monitor,
   influxdb_url: "http://localhost:8086",
   influxdb_credentials: nil,
   influxdb_db: "aquarium",
-  influxdb_measurement: "temperature"
+  influxdb_measurement: "temperature",
+  lcd_implementation: AquariumTemperatureMonitor.LCDDriver.StubImpl
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -22,8 +23,15 @@ config :ui, UiWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [node: ["node_modules/webpack/bin/webpack.js", "--mode", "development", "--watch-stdin",
-                    cd: Path.expand("../assets", __DIR__)]]
+  watchers: [
+    node: [
+      "node_modules/webpack/bin/webpack.js",
+      "--mode",
+      "development",
+      "--watch-stdin",
+      cd: Path.expand("../assets", __DIR__)
+    ]
+  ]
 
 # ## SSL Support
 #

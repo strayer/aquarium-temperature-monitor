@@ -89,7 +89,19 @@ config :aquarium_temperature_monitor,
   influxdb_url: System.get_env("INFLUXDB_URL"),
   influxdb_credentials: System.get_env("INFLUXDB_CREDENTIALS"),
   influxdb_db: System.get_env("INFLUXDB_DB"),
-  influxdb_measurement: System.get_env("INFLUXDB_MEASUREMENT")
+  influxdb_measurement: System.get_env("INFLUXDB_MEASUREMENT"),
+  lcd: %{
+    rs: String.to_integer(System.get_env("LCD_PIN_RS")),
+    en: String.to_integer(System.get_env("LCD_PIN_EN")),
+    d4: String.to_integer(System.get_env("LCD_PIN_D4")),
+    d5: String.to_integer(System.get_env("LCD_PIN_D5")),
+    d6: String.to_integer(System.get_env("LCD_PIN_D6")),
+    d7: String.to_integer(System.get_env("LCD_PIN_D7")),
+    rows: 2,
+    cols: 16,
+    font_5x10: false
+  },
+  lcd_implementation: AquariumTemperatureMonitor.LCDDriver.HardwareImpl
 
 # Import target specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

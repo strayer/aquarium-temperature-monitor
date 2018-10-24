@@ -38,7 +38,9 @@ defmodule AquariumTemperatureMonitor.MixProject do
       {:bypass, "~> 0.8", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
       {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0.0-rc.3", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0.0-rc.3", only: [:dev], runtime: false},
+      {:ex_lcd, "~> 0.4.0"},
+      {:timex, "~> 3.3"}
     ]
   end
 

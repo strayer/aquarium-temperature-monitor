@@ -8,6 +8,8 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
   use GenServer
   require Logger
 
+  alias AquariumTemperatureMonitor.LCDDriver
+
   defmodule TemperatureReading do
     @typedoc """
     A struct that represents a temperature reading with a celsius and DateTime.
@@ -98,7 +100,7 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
       |> parse_raw_reading()
       |> update_state_with_reading(state)
 
-    # TODO send temperature to LCDDriver
+    LCDDriver.update_temperature_reading(new_state.current_reading)
 
     log_temperature_change(old_reading.celsius, new_state.current_reading.celsius)
 

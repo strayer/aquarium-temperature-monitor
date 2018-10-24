@@ -8,4 +8,5 @@ config :aquarium_temperature_monitor,
   influxdb_url: "dummy",
   influxdb_credentials: nil,
   influxdb_db: "aquarium",
-  influxdb_measurement: "temperature"
+  influxdb_measurement: "temperature",
+  lcd_implementation: AquariumTemperatureMonitor.LCDDriver.StubImpl
