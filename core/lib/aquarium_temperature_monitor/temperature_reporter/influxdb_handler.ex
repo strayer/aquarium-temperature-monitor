@@ -1,4 +1,8 @@
 defmodule AquariumTemperatureMonitor.TemperatureReporter.InfluxDBHandler do
+  @moduledoc """
+  Contains functions to report temperature readings to an InfluxDB instance.
+  """
+
   alias AquariumTemperatureMonitor.TemperatureMonitor.TemperatureReading
 
   @headers [
@@ -6,6 +10,10 @@ defmodule AquariumTemperatureMonitor.TemperatureReporter.InfluxDBHandler do
       "#{Atom.to_string(:aquarium_temperature_monitor)}/#{Mix.Project.config()[:version]}"
   ]
 
+  @doc """
+  Sends a `AquariumTemperatureMonitor.TemperatureMonitor.TemperatureReading` to
+  a configured InfluxDB instance.
+  """
   def send_temperature(%TemperatureReading{} = reading, config) do
     {:ok, %HTTPoison.Response{status_code: 204}} =
       reading

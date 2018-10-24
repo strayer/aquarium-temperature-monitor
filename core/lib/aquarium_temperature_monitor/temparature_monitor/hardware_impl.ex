@@ -1,4 +1,9 @@
 defmodule AquariumTemperatureMonitor.TemperatureMonitor.HardwareImpl do
+  @moduledoc """
+  The hardware implementation for reading temperatures from Dallas 1-Wire
+  temperature sensors like the DS18B20.
+  """
+
   @behaviour AquariumTemperatureMonitor.TemperatureMonitor.Behaviour
 
   @sys_dir "/sys/bus/w1/devices/"

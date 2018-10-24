@@ -1,4 +1,8 @@
 defmodule AquariumTemperatureMonitor.TemperatureMonitorTest do
+  @moduledoc """
+  Tests for the `AquariumTemperatureMonitor.TemperatureMonitor` module.
+  """
+
   use ExUnit.Case, async: true
 
   alias AquariumTemperatureMonitor.TemperatureMonitor

@@ -1,4 +1,8 @@
 defmodule AquariumTemperatureMonitor.TemperatureReporterTest do
+  @moduledoc """
+  Tests for the `AquariumTemperatureMonitor.TemperatureReporter` module.
+  """
+
   use ExUnit.Case, async: true
 
   alias AquariumTemperatureMonitor.TemperatureMonitor.TemperatureReading
@@ -44,6 +48,7 @@ defmodule AquariumTemperatureMonitor.TemperatureReporterTest do
       assert "POST" == conn.method
       assert ["Basic dGVzdHVzZXI6dGVzdHBhc3M="] == Conn.get_req_header(conn, "authorization")
 
+      # credo:disable-for-next-line Credo.Check.Design.AliasUsage
       assert ["aquarium_temperature_monitor/" <> Mix.Project.config()[:version]] ==
                Conn.get_req_header(conn, "user-agent")
 

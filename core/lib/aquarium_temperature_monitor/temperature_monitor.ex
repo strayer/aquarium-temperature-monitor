@@ -11,9 +11,10 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
   alias AquariumTemperatureMonitor.LCDDriver
 
   defmodule TemperatureReading do
-    @typedoc """
+    @moduledoc """
     A struct that represents a temperature reading with a celsius and DateTime.
     """
+
     @type t :: %__MODULE__{
             celsius: Float.t() | nil,
             datetime: nil
@@ -23,10 +24,17 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
   end
 
   defmodule State do
+    @moduledoc """
+    A struct that represents the current state of the GenServer.
+    """
+
     defstruct device_id: nil, current_reading: %TemperatureReading{}
   end
 
   defmodule Behaviour do
+    @moduledoc """
+    A behaviour describing implementation details for reading temperatures.
+    """
     @callback read_temperature(String.t()) ::
                 {:ok, {String.t(), String.t()}} | {:error, String.t()}
   end
@@ -55,6 +63,7 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
     GenServer.start_link(__MODULE__, %State{device_id: device_id}, name: __MODULE__)
   end
 
+  @spec get_reading() :: TemperatureReading
   def get_reading do
     GenServer.call(__MODULE__, :get_reading)
   end

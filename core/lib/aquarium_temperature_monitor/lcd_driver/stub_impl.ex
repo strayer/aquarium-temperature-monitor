@@ -1,4 +1,8 @@
 defmodule AquariumTemperatureMonitor.LCDDriver.StubImpl do
+  @moduledoc """
+  A stub LCD implementation, intended for debugging and testing.
+  """
+
   require Logger
 
   def degree_symbol, do: '°'

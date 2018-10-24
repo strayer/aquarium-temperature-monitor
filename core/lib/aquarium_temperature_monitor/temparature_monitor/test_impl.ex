@@ -1,4 +1,9 @@
 defmodule AquariumTemperatureMonitor.TemperatureMonitor.TestImpl do
+  @moduledoc """
+  A test implementation for temperature reading, intended for development and
+  testing.
+  """
+
   @behaviour AquariumTemperatureMonitor.TemperatureMonitor.Behaviour
 
   @impl true

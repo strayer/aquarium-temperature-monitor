@@ -1,4 +1,8 @@
 defmodule AquariumTemperatureMonitor.LCDDriver do
+  @moduledoc """
+  A GenServer controlling a LCD module displaying, among other things, the
+  current TemperatureReading.
+  """
   require Logger
 
   use GenServer

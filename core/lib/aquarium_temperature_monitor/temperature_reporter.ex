@@ -1,4 +1,8 @@
 defmodule AquariumTemperatureMonitor.TemperatureReporter do
+  @moduledoc """
+  A GenServer that periodically reports the current TemperatureReading to an
+  InfluxDB instance.
+  """
   use GenServer
 
   require Logger
