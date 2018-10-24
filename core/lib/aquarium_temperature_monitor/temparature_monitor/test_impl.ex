@@ -11,7 +11,7 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor.TestImpl do
       "33 00 4b 46 ff ff 02 10 f4 t=" <> get_random_temperature()}}
   end
 
-  defp get_random_temperature() do
+  defp get_random_temperature do
     "27" <> String.pad_leading(Integer.to_string(Enum.random(0..999)), 3, "0")
   end
 end

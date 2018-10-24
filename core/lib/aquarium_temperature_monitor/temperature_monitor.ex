@@ -55,7 +55,7 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
     GenServer.start_link(__MODULE__, %State{device_id: device_id}, name: __MODULE__)
   end
 
-  def get_reading() do
+  def get_reading do
     GenServer.call(__MODULE__, :get_reading)
   end
 
@@ -147,11 +147,11 @@ defmodule AquariumTemperatureMonitor.TemperatureMonitor do
   end
 
   defp log_temperature_change(nil, new_celsius) do
-    Logger.debug("Initial temperature reading: #{new_celsius}")
+    Logger.debug(fn -> "Initial temperature reading: #{new_celsius}" end)
   end
 
   defp log_temperature_change(old_celsius, new_celsius) when old_celsius != new_celsius do
-    Logger.debug("Temperature changed: #{old_celsius} -> #{new_celsius}")
+    Logger.debug(fn -> "Temperature changed: #{old_celsius} -> #{new_celsius}" end)
   end
 
   defp log_temperature_change(_, _) do

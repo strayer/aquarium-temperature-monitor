@@ -1,8 +1,9 @@
 defmodule AquariumTemperatureMonitor.TemperatureReporterTest do
   use ExUnit.Case, async: true
 
-  alias AquariumTemperatureMonitor.TemperatureReporter
   alias AquariumTemperatureMonitor.TemperatureMonitor.TemperatureReading
+  alias AquariumTemperatureMonitor.TemperatureReporter
+  alias Plug.Conn
 
   @nil_celsius_reading %TemperatureReading{celsius: nil, datetime: DateTime.utc_now()}
   @nil_datetime_reading %TemperatureReading{celsius: 27.0, datetime: nil}
@@ -36,19 +37,19 @@ defmodule AquariumTemperatureMonitor.TemperatureReporterTest do
 
   test "should call InfluxDB with valid reading", %{bypass: bypass, server: server} do
     Bypass.expect_once(bypass, fn conn ->
-      conn = Plug.Conn.fetch_query_params(conn)
+      conn = Conn.fetch_query_params(conn)
 
       assert "/write" == conn.request_path
       assert %{"db" => "testdb"} == conn.params
       assert "POST" == conn.method
-      assert ["Basic dGVzdHVzZXI6dGVzdHBhc3M="] == Plug.Conn.get_req_header(conn, "authorization")
+      assert ["Basic dGVzdHVzZXI6dGVzdHBhc3M="] == Conn.get_req_header(conn, "authorization")
 
       assert ["aquarium_temperature_monitor/" <> Mix.Project.config()[:version]] ==
-               Plug.Conn.get_req_header(conn, "user-agent")
+               Conn.get_req_header(conn, "user-agent")
 
       # TODO assert request content
 
-      Plug.Conn.resp(conn, 204, "")
+      Conn.resp(conn, 204, "")
     end)
 
     GenServer.cast(server, {:handle_reading, @valid_reading})

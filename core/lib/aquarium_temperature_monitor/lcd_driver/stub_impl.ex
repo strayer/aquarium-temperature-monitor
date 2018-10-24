@@ -3,7 +3,7 @@ defmodule AquariumTemperatureMonitor.LCDDriver.StubImpl do
 
   def degree_symbol, do: '°'
 
-  def start_link() do
+  def start_link do
   end
 
   def render_first_line(charlist) do
