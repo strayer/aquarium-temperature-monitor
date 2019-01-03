@@ -1,5 +1,6 @@
 defmodule UiWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :ui
+  use Sentry.Phoenix.Endpoint
 
   socket("/socket", UiWeb.UserSocket,
     websocket: true,

@@ -108,6 +108,13 @@ config :aquarium_temperature_monitor,
   },
   lcd_implementation: AquariumTemperatureMonitor.LCDDriver.HardwareImpl
 
+config :sentry,
+  dsn: System.get_env("SENTRY_DSN"),
+  environment_name: Mix.env(),
+  included_environments: [:prod],
+  enable_source_code_context: true,
+  root_source_code_path: File.cwd!()
+
 # Import target specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 # Uncomment to use target specific configurations

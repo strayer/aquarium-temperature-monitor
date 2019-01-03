@@ -40,7 +40,8 @@ defmodule Fw.MixProject do
       {:nerves, "~> 1.3", runtime: false},
       {:shoehorn, "~> 0.4"},
       {:ring_logger, "~> 0.6"},
-      {:ui, path: "../ui"}
+      {:ui, path: "../ui"},
+      {:sentry, "~> 7.0"}
     ] ++ deps(@target)
   end
 

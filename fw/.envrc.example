@@ -10,6 +10,7 @@ export INFLUXDB_URL="***CHANGEME***"
 export INFLUXDB_CREDENTIALS="***CHANGEME***"
 export INFLUXDB_DB="aquarium"
 export INFLUXDB_MEASUREMENT="temperature"
+export SENTRY_DSN="***CHANGEME***"
 
 # WiFi configuration
 export NERVES_NETWORK_SSID="***CHANGEME***"

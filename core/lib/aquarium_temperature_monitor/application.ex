@@ -22,6 +22,9 @@ defmodule AquariumTemperatureMonitor.Application do
     ]
 
     opts = [strategy: :one_for_one, name: AquariumTemperatureMonitor.Supervisor]
+
+    {:ok, _} = Logger.add_backend(Sentry.LoggerBackend)
+
     Supervisor.start_link(children, opts)
   end
 
