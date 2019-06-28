@@ -106,6 +106,8 @@ config :aquarium_temperature_monitor,
     cols: 16,
     font_5x10: false
   },
+  lcd_pin_backlight: String.to_integer(System.get_env("LCD_PIN_BACKLIGHT")),
+  lcd_pin_backlight_button: String.to_integer(System.get_env("LCD_PIN_BACKLIGHT_BUTTON")),
   lcd_implementation: AquariumTemperatureMonitor.LCDDriver.HardwareImpl
 
 config :sentry,

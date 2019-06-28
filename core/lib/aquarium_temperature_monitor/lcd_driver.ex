@@ -11,6 +11,11 @@ defmodule AquariumTemperatureMonitor.LCDDriver do
 
   @implementation Application.fetch_env!(:aquarium_temperature_monitor, :lcd_implementation)
 
+  @lcd_backlight_button_pin Application.get_env(
+                              :aquarium_temperature_monitor,
+                              :lcd_pin_backlight_button
+                            )
+
   ###
   # API
   ###
@@ -29,8 +34,15 @@ defmodule AquariumTemperatureMonitor.LCDDriver do
 
   @impl true
   def init(_) do
-    @implementation.start_link()
-    {:ok, start_timer(%{temperature_reading: nil, timer_ref: nil})}
+    {:ok, %{pid_backlight: pid_backlight}} = @implementation.start_link()
+
+    {:ok,
+     start_update_timer(%{
+       temperature_reading: nil,
+       timer_ref: nil,
+       pid_backlight: pid_backlight,
+       backlight_timer_ref: nil
+     })}
   end
 
   @impl true
@@ -38,7 +50,33 @@ defmodule AquariumTemperatureMonitor.LCDDriver do
     {:noreply,
      state
      |> Map.put(:temperature_reading, reading)
-     |> start_timer(0)}
+     |> start_update_timer(0)}
+  end
+
+  @impl true
+  def handle_info({:gpio_interrupt, @lcd_backlight_button_pin, :falling}, state) do
+    Logger.debug("LCD backlight button PIN falling")
+    {:noreply, state}
+  end
+
+  @impl true
+  def handle_info({:gpio_interrupt, @lcd_backlight_button_pin, :rising}, state) do
+    Logger.debug("LCD backlight button PIN rising")
+    {:noreply, enable_backlight_and_start_timer(state)}
+  end
+
+  @impl true
+  def handle_info(:enable_backlight, state) do
+    Logger.debug("Enabling LCD backlight")
+    @implementation.enable_backlight(state.pid_backlight)
+    {:noreply, state}
+  end
+
+  @impl true
+  def handle_info(:disable_backlight, state) do
+    Logger.debug("Disabling LCD backlight")
+    @implementation.disable_backlight(state.pid_backlight)
+    {:noreply, state}
   end
 
   @impl true
@@ -54,10 +92,14 @@ defmodule AquariumTemperatureMonitor.LCDDriver do
     |> format_first_line()
     |> @implementation.render_first_line()
 
-    {:noreply, start_timer(state)}
+    {:noreply, start_update_timer(state)}
   end
 
   def format_temperature(%{temperature_reading: nil}) do
+    ''
+  end
+
+  def format_temperature(%{temperature_reading: %{celsius: celsius}}) when is_nil(celsius) do
     ''
   end
 
@@ -70,6 +112,10 @@ defmodule AquariumTemperatureMonitor.LCDDriver do
   end
 
   def format_time_since(%{temperature_reading: nil}) do
+    ''
+  end
+
+  def format_time_since(%{temperature_reading: %{datetime: datetime}}) when is_nil(datetime) do
     ''
   end
 
@@ -99,9 +145,16 @@ defmodule AquariumTemperatureMonitor.LCDDriver do
     temp_part ++ time_since_part
   end
 
-  defp start_timer(state, time \\ 1_000) do
+  defp start_update_timer(state, time \\ 1_000) do
     if state.timer_ref, do: Process.cancel_timer(state.timer_ref)
     %{state | timer_ref: Process.send_after(self(), :update_lcd, time)}
+  end
+
+  defp enable_backlight_and_start_timer(state) do
+    Logger.debug("Starting LCD backlight timer")
+    if state.backlight_timer_ref, do: Process.cancel_timer(state.backlight_timer_ref)
+    Process.send_after(self(), :enable_backlight, 0)
+    %{state | backlight_timer_ref: Process.send_after(self(), :disable_backlight, 30_000)}
   end
 
   defp enum_pad(enum, desired_length, direction \\ :leading) do

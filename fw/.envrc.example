@@ -17,9 +17,11 @@ export NERVES_NETWORK_SSID="***CHANGEME***"
 export NERVES_NETWORK_PSK="***CHANGEME***"
 
 # LCD pin configuration
-export LCD_PIN_RS=17
-export LCD_PIN_EN=18
-export LCD_PIN_D4=27
-export LCD_PIN_D5=23
-export LCD_PIN_D6=22
-export LCD_PIN_D7=24
+export LCD_PIN_RS=0
+export LCD_PIN_EN=5
+export LCD_PIN_D4=6
+export LCD_PIN_D5=13
+export LCD_PIN_D6=19
+export LCD_PIN_D7=26
+export LCD_PIN_BACKLIGHT_BUTTON=22
+export LCD_PIN_BACKLIGHT=27
